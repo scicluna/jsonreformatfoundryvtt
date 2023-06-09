@@ -7,7 +7,7 @@ const convertToDbFormat = (json) => {
     return json.map((table, index) => {
         return {
             name: table.name,
-            description: "A table", // You can change this to whatever you want
+            description: "A table",
             results: table.results.map((result, i) => {
                 return {
                     type: 0,
@@ -18,17 +18,17 @@ const convertToDbFormat = (json) => {
                     img: "icons/svg/d20-black.svg",
                     documentCollection: "",
                     documentId: null,
-                    _id: uuid.v4(), // You'll need to replace this with a function that generates unique IDs
+                    _id: uuid.v4(),
                     flags: {},
                 };
             }),
             replacement: true,
             displayRoll: true,
-            img: "modules/EasyTable/easytable.png",
+            img: "icons/svg/d20-black.svg",
             formula: "1d" + table.results.length,
             flags: {
                 core: {
-                    sourceId: uuid.v4(), // Again, replace this with your unique ID generator
+                    sourceId: uuid.v4(),
                 },
             },
             _stats: {
@@ -37,7 +37,7 @@ const convertToDbFormat = (json) => {
                 coreVersion: "10.286",
                 createdTime: Date.now(),
                 modifiedTime: Date.now(),
-                lastModifiedBy: uuid.v4(), // And here
+                lastModifiedBy: uuid.v4(),
             },
             folder: null,
             sort: 0,
@@ -45,7 +45,7 @@ const convertToDbFormat = (json) => {
                 default: 0,
                 ALJ5mIZ5xzGe2XAs: 3,
             },
-            _id: uuid.v4(), // And here
+            _id: uuid.v4(),
         };
     });
 };
@@ -55,11 +55,9 @@ function tableSmasher(tables) {
     for (let i = 0; i < tables.length; i++) {
         let table = tables[i]
         const nextTable = tables[i + 1]
-
         if (nameEquality(table, nextTable)) {
             table = recursivenameCheck(table, nextTable, tables, i + 1)
         }
-
         if (!nameEquality(table, tables[i - 1])) {
             table.name = formatTablename(table.name)
 
@@ -74,7 +72,6 @@ function formatTablename(name) {
     name = name.replace(/(\d+-)(\d+)/, (match, p1, p2) => {
         return p1 + p2.padStart(3, '0');
     })
-
     let words = name.split(' ')
     words[2] = words[2].charAt(0).toUpperCase() + words[2].slice(1)
 
@@ -83,7 +80,6 @@ function formatTablename(name) {
 
 function nameEquality(table1, table2) {
     if (!table1 || !table2) return false
-
 
     const name1 = table1.name.split(":")
     const name2 = table2.name.split(":")
@@ -94,7 +90,6 @@ function nameEquality(table1, table2) {
     if (title1 == title2) {
         return true
     }
-
     return false
 }
 
@@ -104,10 +99,8 @@ function recursivenameCheck(table, nextTable, tables, index) {
     for (let i = 0; i < nextTable.results.length; i++) {
         table.results.push(nextTable.results[i])
     }
-
     return recursivenameCheck(table, tables[index + 1], tables, index + 1)
 }
-
 
 const writeToFile = (json) => {
     const dbFormat = convertToDbFormat(json);
